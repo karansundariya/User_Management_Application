@@ -1,75 +1,53 @@
 # User Management Application
 
-A small Spring Boot application demonstrating user CRUD operations and a minimal service/repository layer. This repository is structured and documented for inclusion in a professional portfolio or resume.
+You open a client and create or manage a user. This small monolithic service demonstrates a clear REST API and layered implementation using Spring Boot.
 
-## Highlights
+Services Overview
+Service	Port	Responsibility
+user-service	8080	Provide REST endpoints for user CRUD (Controller → Service → Repository)
 
-- Language: Java
-- Framework: Spring Boot
-- Build: Maven (wrapper included)
-- Database: PostgreSQL (example docker-compose included)
+Architecture Flow
+Client → user-service (Spring Boot Controller) → Service layer → Spring Data JPA Repository → PostgreSQL
 
-## Features
+How To Run
+Step 1: Start infrastructure
+docker-compose up -d
 
-- Create, read, update, delete (CRUD) users
-- Layered architecture: Controller → Service → Repository
-- Example Docker Compose for easy local demo
+Step 2: Wait ~10s for the database to initialize.
 
-## Tech / Tools
-
-- Java 17+
-- Spring Boot
-- Maven (mvnw included)
-- PostgreSQL
-- Docker (optional)
-
-## Quick Start (developer)
-
-1. Copy the example env file and set real values (do not commit):
-
-```bash
-cp .env.example .env
-# edit .env to set secure passwords/URLs
-```
-
-2. Run with Maven wrapper:
-
-```bash
-./mvnw clean package
+Step 3: Start the service (local dev)
+cd .
 ./mvnw spring-boot:run
-```
 
-3. Or run with Docker Compose (uses `.env`):
+API Examples (end-to-end)
+1) Create user
+POST http://localhost:8080/api/users
+{
+	"name": "Alice",
+	"email": "alice@example.com"
+}
 
-```bash
-docker-compose up --build
-```
+2) Get user
+GET http://localhost:8080/api/users/{id}
 
-The application listens on the port defined by `SERVER_PORT` or 8080 by default.
+3) Update user
+PUT http://localhost:8080/api/users/{id}
+{
+	"name": "Alice B",
+	"email": "alice.b@example.com"
+}
 
-## Project Structure
+4) Delete user
+DELETE http://localhost:8080/api/users/{id}
 
-- `src/main/java` — application source (controllers, services, entities, repositories)
-- `src/test/java` — unit/integration tests
-- `pom.xml` — Maven project definition
-- `mvnw`, `mvnw.cmd`, `.mvn/` — Maven wrapper for consistent builds
-- `docker-compose.yml` — optional compose for DB + app
-- `src/main/resources/application.yml.example` — config template (do not commit real secrets)
+Testing End-to-End
+1) Run the app with Docker Compose / local DB.
+2) Use `curl` or Postman to exercise the API endpoints above.
 
-## How this fits a resume
+Key Concepts Covered
+- RESTful API design
+- Layered architecture (Controller-Service-Repository)
+- Spring Data JPA with PostgreSQL
+- Docker Compose for local infra
 
-- Clean, small codebase showcasing layered design and REST endpoints.
-- Includes build scripts and an example Docker setup for reproducible demos.
-- Tests included to demonstrate basic verification practices.
-
-## Contributing / Notes
-
-- Do not commit real credentials — use `.env` locally and keep it in `.gitignore`.
-- If you want CI, I can add a GitHub Actions workflow to run `mvn test` on PRs.
-
-## License
-
-This project is open for inclusion in a personal portfolio. Add a `LICENSE` file if you want an explicit license.
-
----
-If you want, I'll commit this README and add a short GitHub Actions CI next (runs `mvn test`).
+Made with simplicity for demonstration.
